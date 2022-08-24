@@ -114,6 +114,13 @@ typedef enum
 	IRQn_PRI_7
 }	IntCtrl_PriorityLevelType;
 
+typedef struct
+{
+	IntCtrl_InterruptType				IRQn;
+	IntCtrl_EnableType					enable;
+	IntCtrl_PriorityLevelType		priority;
+} NVIC_ConfigType;
+
 #define	PRIGROUP_8_1	4UL
 #define	PRIGROUP_4_2	5UL
 #define	PRIGROUP_2_4	6UL

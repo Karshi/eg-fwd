@@ -1,53 +1,180 @@
 #include "intctrl.h"
 
-
-
 void IntCtrl_init(void)
 {
-	
-}
-
-void IntCtrl_enable(IntCtrl_InterruptType IRQn)
-{
-	if (IRQn == MEM_MGMT_IRQn)
-	{
-		/*	Enable the memory management fault exception (datasheet p.174)	*/
-		SCB->SYSHNDCTRL	|=	SCB_SYSHNDCTRL_MEM;
-	}
-	else if (IRQn == BUS_FAULT_IRQn)
-	{
-		/*	Enable the bus fault exception (datasheet p.173)	*/
-		SCB->SYSHNDCTRL	|=	SCB_SYSHNDCTRL_BUS;
-	}
-	else if (IRQn == USAGE_FAULT_IRQn)
-	{
-		/*	Enable the usage fault exception (datasheet p.173)	*/
-		SCB->SYSHNDCTRL	|=	SCB_SYSHNDCTRL_USAGE;
-	}
-	else if (IRQn == SYSTICK_IRQn)
-	{
-		/*	Enable the SysTick interrupt generation (datasheet p.139)	*/
-		SYSTICK->STCTRL	|=	SYSTICK_STCTRL_INTEN;
-	}
-	/*	Set the ENx register for the interrupt type (datasheet p.142)	*/
-	else if (IRQn >= 0)
-	{
-		NVIC->EN[IRQn/32]	=	1UL	<<	(IRQn	&	31);
-	}
-}
-
-void IntCtrl_disable(IntCtrl_InterruptType IRQn)
-{
-	
-}
-
-void IntCtrl_setPriorityGrouping(uint32_t priorityGrouping)
-{
 	/*	Write to APINT to set the priority level (datasheet p.164)	*/
-	SCB->APINT	=		APINT_KEY_MASK	|	(priorityGrouping	<<	8U);
-}
-
-void IntCtrl_setPriority(IntCtrl_InterruptType IRQn, uint8_t priority)
-{
+	SCB->APINT	=		APINT_KEY_MASK	|	(PRIORITY_GROUPING	<<	8U);
 	
+	/*	Loop over all the interrupts in NVIC_Config									*/
+	for ( uint8_t i = 0; i < IRQn_count; i++)
+	{
+		uint32_t tempPri;
+		if 			(NVIC_Config[i].IRQn 	== 	MEM_MGMT_IRQn)
+		{
+			/*	Enable or disable interrupt																*/
+			if ( NVIC_Config[i].enable == IRQn_DISABLE )
+			{
+				/**
+				 * Disable the memory management fault exception (datasheet p.174)
+				 * Logic inspired by TivaWare libraries: using one's compliment of mask
+				 * to clear the desired bit
+				 */
+				SCB->SYSHNDCTRL	&=	~(SCB_SYSHNDCTRL_MEM);
+			}
+			
+			else if ( NVIC_Config[i].enable == IRQn_ENABLE )
+			{
+				/*	Enable the memory management fault exception (datasheet p.174)	*/
+				SCB->SYSHNDCTRL	|=	SCB_SYSHNDCTRL_MEM;
+			}
+			
+			/* Set interrupt priority	*/
+			/* Get PRI register				*/
+			tempPri = SCB->SYSPRI1;
+			/* Clear IRQn priority		*/
+			tempPri &= ~(0x7 << 5);
+			/* Set new IRQn priority	*/
+			tempPri |=	NVIC_Config[i].priority << 5;
+			SCB->SYSPRI1 = tempPri;
+		}
+		
+		else if	(NVIC_Config[i].IRQn 	== 	BUS_FAULT_IRQn)
+		{
+			/*	Enable or disable interrupt																*/
+			if ( NVIC_Config[i].enable == IRQn_DISABLE )
+			{
+				/*	Disable the bus fault exception (datasheet p.173)	*/
+				SCB->SYSHNDCTRL	&=	~(SCB_SYSHNDCTRL_BUS);
+			}
+			
+			else if ( NVIC_Config[i].enable == IRQn_ENABLE )
+			{
+				/*	Enable the bus fault exception (datasheet p.173)	*/
+				SCB->SYSHNDCTRL	|=	SCB_SYSHNDCTRL_BUS;
+			}
+			
+			/* Set interrupt priority	*/
+			/* Get PRI register				*/
+			tempPri = SCB->SYSPRI1;
+			/* Clear IRQn priority		*/
+			tempPri &= ~(0x7 << 13);
+			/* Set new IRQn priority	*/
+			tempPri |=	NVIC_Config[i].priority << 13;
+			SCB->SYSPRI1 = tempPri;
+		}
+		
+		else if (NVIC_Config[i].IRQn 	== 	USAGE_FAULT_IRQn)
+		{
+			/*	Enable or disable interrupt																*/
+			if ( NVIC_Config[i].enable == IRQn_DISABLE )
+			{
+				/*	Disable the usage fault exception (datasheet p.173)	*/
+				SCB->SYSHNDCTRL	&=	~(SCB_SYSHNDCTRL_USAGE);
+			}
+			
+			else if ( NVIC_Config[i].enable == IRQn_ENABLE )
+			{
+				/*	Enable the usage fault exception (datasheet p.173)	*/
+				SCB->SYSHNDCTRL	|=	SCB_SYSHNDCTRL_USAGE;
+			}
+			
+			/* Set interrupt priority	*/
+			/* Get PRI register				*/
+			tempPri = SCB->SYSPRI1;
+			/* Clear IRQn priority		*/
+			tempPri &= ~(0x7 << 21);
+			/* Set new IRQn priority	*/
+			tempPri |=	NVIC_Config[i].priority << 21;
+			SCB->SYSPRI1 = tempPri;
+		}
+		
+		else if (NVIC_Config[i].IRQn 	== 	SVCALL_IRQn)
+		{
+			/* No enable/disable, only handling priority programming */
+			/* Set interrupt priority	*/
+			/* Get PRI register				*/
+			tempPri = SCB->SYSPRI2;
+			/* Clear IRQn priority		*/
+			tempPri &= ~(0x7 << 29);
+			/* Set new IRQn priority	*/
+			tempPri |=	NVIC_Config[i].priority << 29;
+			SCB->SYSPRI2 = tempPri;
+		}
+			
+		else if (NVIC_Config[i].IRQn 	== 	DEBUG_MONITOR_IRQn)
+		{
+			/* No enable/disable, only handling priority programming */
+			/* Set interrupt priority	*/
+			/* Get PRI register				*/
+			tempPri = SCB->SYSPRI3;
+			/* Clear IRQn priority		*/
+			tempPri &= ~(0x7 << 5);
+			/* Set new IRQn priority	*/
+			tempPri |=	NVIC_Config[i].priority << 5;
+			SCB->SYSPRI3 = tempPri;
+		}
+			
+		else if (NVIC_Config[i].IRQn 	== 	PENDSV_IRQn)
+		{
+			/* No enable/disable, only handling priority programming */
+			/* Set interrupt priority	*/
+			/* Get PRI register				*/
+			tempPri = SCB->SYSPRI3;
+			/* Clear IRQn priority		*/
+			tempPri &= ~(0x7 << 21);
+			/* Set new IRQn priority	*/
+			tempPri |= NVIC_Config[i].priority << 21;
+			SCB->SYSPRI3 = tempPri;
+		}
+		
+		else if (NVIC_Config[i].IRQn 	== 	SYSTICK_IRQn)
+		{
+			/*	Enable or disable interrupt																*/
+			if ( NVIC_Config[i].enable == IRQn_DISABLE )
+			{
+				/*	Disable the SysTick interrupt generation (datasheet p.139)	*/
+				SYSTICK->STCTRL	|=	SYSTICK_STCTRL_INTEN;
+			}
+			
+			else if ( NVIC_Config[i].enable == IRQn_ENABLE )
+			{
+				/*	Enable the SysTick interrupt generation (datasheet p.139)	*/
+				SYSTICK->STCTRL	|=	SYSTICK_STCTRL_INTEN;
+			}
+			
+			/* Set interrupt priority	*/
+			/* Get PRI register				*/
+			tempPri = SCB->SYSPRI3;
+			/* Clear IRQn priority		*/
+			tempPri &= ~(0x7 << 29);
+			/* Set new IRQn priority	*/
+			tempPri |=	NVIC_Config[i].priority << 29;
+			SCB->SYSPRI3 = tempPri;
+		}
+		
+		else if (NVIC_Config[i].IRQn 	>= 	0)
+		{
+			/*	Enable or disable interrupt																*/
+			if ( NVIC_Config[i].enable == IRQn_DISABLE )
+			{
+				/*	Set the DISx register for the interrupt type (datasheet p.144)	*/
+				NVIC->DIS[NVIC_Config[i].IRQn/32]	=	1UL	<<	(NVIC_Config[i].IRQn	&	31);
+			}
+			
+			else if ( NVIC_Config[i].enable == IRQn_ENABLE )
+			{
+				/*	Set the ENx register for the interrupt type (datasheet p.142)	*/
+				NVIC->EN[NVIC_Config[i].IRQn/32]	=	1UL	<<	(NVIC_Config[i].IRQn	&	31);
+			}
+						
+			/* Set interrupt priority	(datasheet p.152)*/
+			/* Get PRI register				*/
+			tempPri	= NVIC->PRI[NVIC_Config[i].IRQn/4];
+			/* Clear IRQn priority		*/
+			tempPri	&= ~(0x7 << (((NVIC_Config[i].IRQn & 3) * 8) + 5));
+			/* Set new IRQn priority	*/
+			tempPri |=	NVIC_Config[i].priority << (((NVIC_Config[i].IRQn & 3) * 8) + 5);
+			NVIC->PRI[NVIC_Config[i].IRQn/4] = tempPri;
+		}
+	}
 }
