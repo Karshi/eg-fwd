@@ -24,7 +24,7 @@
  * Set the priority grouping
  * Accepted values: PRIGROUP_8_1, PRIGROUP_4_2, PRIGROUP_2_4, PRIGROUP_1_8 (PRIGROUP_#groups_#subgroups)
  */
-#define			PRIORITY_GROUPING			PRIGROUP_4_2
+#define			PRIORITY_GROUPING			PRIGROUP_8_1
 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS

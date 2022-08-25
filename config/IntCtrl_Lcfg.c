@@ -33,7 +33,7 @@
  */
 NVIC_ConfigType	NVIC_Config[]	=	
 {
-	{SYSTICK_IRQn, IRQn_ENABLE, IRQn_PRI_3}
+	{SYSTICK_IRQn, IRQn_ENABLE, IRQn_PRI_0}
 };
 
 /* Calculating the size of the array */

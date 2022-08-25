@@ -121,7 +121,7 @@ typedef struct
 	IntCtrl_PriorityLevelType		priority;
 } NVIC_ConfigType;
 
-#define	PRIGROUP_8_1	4UL
+#define	PRIGROUP_8_1	0UL
 #define	PRIGROUP_4_2	5UL
 #define	PRIGROUP_2_4	6UL
 #define	PRIGROUP_1_8	7UL
