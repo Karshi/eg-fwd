@@ -2,7 +2,7 @@
 #define __PORT_DRIVER_H
 
 #include <stdint.h>
-#include "register_map.h"
+#include "mcu_hw.h"
 
 typedef enum
 {
@@ -98,6 +98,16 @@ typedef struct
 	Port_PinInternalAttachType	PortPinInternalAttach;
 	Port_PinOutputCurrentType		PortPinOutputCurrent;
 } Port_ConfigType;
+
+static GPIO_Type* Port_GPIO[] = 
+{
+	GPIOA,
+	GPIOB,
+	GPIOC,
+	GPIOD,
+	GPIOE,
+	GPIOF
+};
 
 extern Port_ConfigType portConfig[];
 extern uint32_t Port_count;

@@ -2,11 +2,12 @@
 #define __GPIO_H
 
 #include <stdint.h>
+#include "port_driver.h"
 
-typedef uint32_t Dio_ChannelType;
-typedef uint32_t Dio_PortType;
-typedef uint32_t Dio_LevelType;
-typedef uint32_t Dio_PortLevelType;
+typedef Port_ChannelType Dio_ChannelType;
+typedef uint8_t Dio_PortType;
+typedef Port_PinLevelType Dio_LevelType;
+typedef uint8_t Dio_PortLevelType;
 
 Dio_LevelType Dio_ReadChannel(Dio_ChannelType ChannelId);
 void Dio_WriteChannel(Dio_ChannelType ChannelId, Dio_LevelType Level);
