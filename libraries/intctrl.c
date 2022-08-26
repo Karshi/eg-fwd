@@ -17,9 +17,9 @@ void IntCtrl_init(void)
 			/* Get PRI register				*/
 			tempPri = SCB->SYSPRI1;
 			/* Clear IRQn priority		*/
-			tempPri &= ~(0x7 << 5);
+			tempPri &= ~(0x7UL << 5);
 			/* Set new IRQn priority	*/
-			tempPri |=	NVIC_Config[i].priority << 5;
+			tempPri |=	(uint32_t)NVIC_Config[i].priority << 5;
 			SCB->SYSPRI1 = tempPri;
 			
 			/*	Enable or disable interrupt																*/
@@ -46,9 +46,9 @@ void IntCtrl_init(void)
 			/* Get PRI register				*/
 			tempPri = SCB->SYSPRI1;
 			/* Clear IRQn priority		*/
-			tempPri &= ~(0x7 << 13);
+			tempPri &= ~(0x7UL << 13);
 			/* Set new IRQn priority	*/
-			tempPri |=	NVIC_Config[i].priority << 13;
+			tempPri |=	(uint32_t)NVIC_Config[i].priority << 13;
 			SCB->SYSPRI1 = tempPri;
 			
 			/*	Enable or disable interrupt																*/
@@ -71,9 +71,9 @@ void IntCtrl_init(void)
 			/* Get PRI register				*/
 			tempPri = SCB->SYSPRI1;
 			/* Clear IRQn priority		*/
-			tempPri &= ~(0x7 << 21);
+			tempPri &= ~(0x7UL << 21);
 			/* Set new IRQn priority	*/
-			tempPri |=	NVIC_Config[i].priority << 21;
+			tempPri |=	(uint32_t)NVIC_Config[i].priority << 21;
 			SCB->SYSPRI1 = tempPri;
 			
 			/*	Enable or disable interrupt																*/
@@ -97,9 +97,9 @@ void IntCtrl_init(void)
 			/* Get PRI register				*/
 			tempPri = SCB->SYSPRI2;
 			/* Clear IRQn priority		*/
-			tempPri &= ~(0x7 << 29);
+			tempPri &= ~(0x7UL << 29);
 			/* Set new IRQn priority	*/
-			tempPri |=	NVIC_Config[i].priority << 29;
+			tempPri |=	(uint32_t)NVIC_Config[i].priority << 29;
 			SCB->SYSPRI2 = tempPri;
 		}
 			
@@ -110,9 +110,9 @@ void IntCtrl_init(void)
 			/* Get PRI register				*/
 			tempPri = SCB->SYSPRI3;
 			/* Clear IRQn priority		*/
-			tempPri &= ~(0x7 << 5);
+			tempPri &= ~(0x7UL << 5);
 			/* Set new IRQn priority	*/
-			tempPri |=	NVIC_Config[i].priority << 5;
+			tempPri |=	(uint32_t)NVIC_Config[i].priority << 5;
 			SCB->SYSPRI3 = tempPri;
 		}
 			
@@ -123,9 +123,9 @@ void IntCtrl_init(void)
 			/* Get PRI register				*/
 			tempPri = SCB->SYSPRI3;
 			/* Clear IRQn priority		*/
-			tempPri &= ~(0x7 << 21);
+			tempPri &= ~(0x7UL << 21);
 			/* Set new IRQn priority	*/
-			tempPri |= NVIC_Config[i].priority << 21;
+			tempPri |= (uint32_t)NVIC_Config[i].priority << 21;
 			SCB->SYSPRI3 = tempPri;
 		}
 		
@@ -135,9 +135,9 @@ void IntCtrl_init(void)
 			/* Get PRI register				*/
 			tempPri = SCB->SYSPRI3;
 			/* Clear IRQn priority		*/
-			tempPri &= ~(0x7 << 29);
+			tempPri &= ~(0x7UL << 29);
 			/* Set new IRQn priority	*/
-			tempPri |=	NVIC_Config[i].priority << 29;
+			tempPri |=	(uint32_t)NVIC_Config[i].priority << 29;
 			SCB->SYSPRI3 = tempPri;
 			
 			/*	Enable or disable interrupt																*/
@@ -160,9 +160,9 @@ void IntCtrl_init(void)
 			/* Get PRI register				*/
 			tempPri	= NVIC->PRI[NVIC_Config[i].IRQn/4];
 			/* Clear IRQn priority		*/
-			tempPri	&= ~(0x7 << (((NVIC_Config[i].IRQn & 3) * 8) + 5));
+			tempPri	&= ~(0x7UL << (((NVIC_Config[i].IRQn & 3) * 8) + 5));
 			/* Set new IRQn priority	*/
-			tempPri |=	NVIC_Config[i].priority << (((NVIC_Config[i].IRQn & 3) * 8) + 5);
+			tempPri |=	(uint32_t)NVIC_Config[i].priority << (((NVIC_Config[i].IRQn & 3) * 8) + 5);
 			NVIC->PRI[NVIC_Config[i].IRQn/4] = tempPri;
 			
 			/*	Enable or disable interrupt																*/
