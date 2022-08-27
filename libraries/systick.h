@@ -23,7 +23,7 @@
  *  GLOBAL CONSTANT MACROS
  *********************************************************************************************************************/
 
-#define MAXIMUM_TICKS 0x100000
+#define MAXIMUM_TICKS 0x1000000
 
 /**********************************************************************************************************************
  *  GLOBAL FUNCTION MACROS
@@ -61,7 +61,7 @@ typedef enum
 * \Parameters (out): None                                                      
 * \Return value:   : None
 *******************************************************************************/
-void SysTick_RegisterCallback(Callback_function Callback);
+void SysTick_RegisterCallback(void(*Callback)(void));
 
 /******************************************************************************
 * \Syntax          : void SysTick_StartTimer(SysTick_ValueType Value)

@@ -11,7 +11,7 @@ void SysTick_Handler(void)
 	}
 }
 
-void SysTick_RegisterCallback(Callback_function Callback)
+void SysTick_RegisterCallback(void(*Callback)(void))
 {
 	SysTick_callback = Callback;
 }
