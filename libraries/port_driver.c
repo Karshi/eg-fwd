@@ -17,7 +17,7 @@ void Port_Init(const Port_ConfigType* ConfigPtr)
 		/* Set the direction for the pin in GPIODIR, 1 OUTPUT, 0 INPUT */
 //		port->DIR 		|= (uint32_t)ConfigPtr[i].PortPinDirection << pinOffset;
 		BIT_BAND_PERIPH(port->DIR, pinOffset) = (uint32_t)ConfigPtr[i].PortPinDirection;
-		
+				
 		/* Configure GPIOAFSEL to program as GPIO or alternate pin */
 //		port->AFSEL 	|= (uint32_t)ConfigPtr[i].PortPinMode << pinOffset;
 		BIT_BAND_PERIPH(port->AFSEL, pinOffset) = (uint32_t)ConfigPtr[i].PortPinMode;
@@ -63,6 +63,9 @@ void Port_Init(const Port_ConfigType* ConfigPtr)
 				BIT_BAND_PERIPH_SET(port->ODR, pinOffset);
 				break;
 		}
+		
+		/* Set the digital enable for the pin in GPIODEN */
+		BIT_BAND_PERIPH(port->DEN, pinOffset) = 1UL;
 		
 		/* In case of output GPIO, set the output level */
 		if (ConfigPtr[i].PortPinDirection && !ConfigPtr[i].PortPinMode)
