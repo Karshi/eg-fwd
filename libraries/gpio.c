@@ -1,7 +1,5 @@
 #include "gpio.h"
 
-//#define BITMASKING
-
 Dio_LevelType Dio_ReadChannel(Dio_ChannelType ChannelId)
 {
 	uint8_t			pinOffset = ChannelId & 7;

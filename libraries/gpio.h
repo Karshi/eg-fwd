@@ -1,7 +1,6 @@
 #ifndef __GPIO_H
 #define __GPIO_H
 
-#include <stdint.h>
 #include "port_driver.h"
 
 typedef Port_ChannelType Dio_ChannelType;
