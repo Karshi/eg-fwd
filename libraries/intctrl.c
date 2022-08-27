@@ -27,8 +27,6 @@ void IntCtrl_init(void)
 			{
 				/**
 				 * Disable the memory management fault exception (datasheet p.174)
-				 * Logic inspired by TivaWare libraries: using one's compliment of mask
-				 * to clear the desired bit
 				 */
 				SCB->SYSHNDCTRL	&=	~(SCB_SYSHNDCTRL_MEM);
 			}
