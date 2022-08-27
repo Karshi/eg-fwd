@@ -1,4 +1,3 @@
-#include "mcu_hw.h"
 #include "port_driver.h"
 
 void Port_Init(const Port_ConfigType* ConfigPtr)
@@ -63,6 +62,16 @@ void Port_Init(const Port_ConfigType* ConfigPtr)
 //				port->ODR |= 1UL << pinOffset;
 				BIT_BAND_PERIPH_SET(port->ODR, pinOffset);
 				break;
+		}
+		
+		/* In case of output GPIO, set the output level */
+		if (ConfigPtr[i].PortPinDirection && !ConfigPtr[i].PortPinMode)
+		{
+			#ifdef BITMASKING
+			BIT_BAND_PERIPH(port->DATA_MAP[1UL<<pinOffset], pinOffset) = ConfigPtr[i].PortPinLevelValue;
+			#else
+			BIT_BAND_PERIPH(port->DATA, pinOffset) = ConfigPtr[i].PortPinLevelValue;
+			#endif
 		}
 	}
 }
