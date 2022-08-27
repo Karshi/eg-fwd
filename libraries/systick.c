@@ -37,6 +37,7 @@ void SysTick_StartTimer(SysTick_ValueType Value)
 	if (Value > 0 && Value <= MAXIMUM_TICKS)
 	{
 		SYSTICK->STRELOAD = Value - 1;
+		SYSTICK->STCURRENT = 0UL;
 		SYSTICK->STCTRL |= 1UL << SYSTICK_STCTRL_ENABLE_OFFSET;
 	}
 }
