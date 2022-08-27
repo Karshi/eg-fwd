@@ -1,25 +1,24 @@
+#include "systick.h"
 #include "intctrl.h"
 #include "port_driver.h"
 #include "gpio.h"
 
-Port_ConfigType portConfig[] =
-	{
-		{PA0,	GPIO,	LOW,	OUTPUT,	PULL_DOWN,	STRENGTH_2MA},
-		{PA1,	GPIO,	LOW,	OUTPUT,	PULL_DOWN,	STRENGTH_2MA},
-		{PA2,	GPIO,	LOW,	OUTPUT,	PULL_DOWN,	STRENGTH_2MA},
-		{PA3,	GPIO,	LOW,	OUTPUT,	PULL_DOWN,	STRENGTH_2MA},
-		{PA6,	GPIO,	LOW,	OUTPUT,	PULL_DOWN,	STRENGTH_2MA},
-		{PE2,	GPIO,	LOW,	OUTPUT,	OPEN_DRAIN,	STRENGTH_4MA},
-		{PF3,	GPIO,	LOW,	INPUT,	PULL_UP,		STRENGTH_8MA}
-	};
-		
-uint32_t Port_count = sizeof(portConfig)/sizeof(portConfig[0]);
+
+void test(void)
+{
+	uint32_t justatest = 1;
+}
 
 int main(void)
 {
+	SysTick_Init();
+	SysTick_RegisterCallback(test);
+	
 	IntCtrl_init();
 
 	Port_Init(portConfig);
+	
+	SysTick_StartTimer(MAXIMUM_TICKS);
 	
 	while(1)
 	{
