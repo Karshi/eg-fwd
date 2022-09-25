@@ -27,6 +27,8 @@
 Port_ConfigType portConfig[] =
 	{
 		{PF1,	GPIO,	LOW,	OUTPUT,	OPEN_DRAIN,	STRENGTH_2MA},
+		{PF4,	GPIO,	LOW,	INPUT,	PULL_UP,	STRENGTH_2MA},
+		{PF0,	GPIO,	LOW,	INPUT,	PULL_UP,	STRENGTH_2MA}
 	};
 		
 
